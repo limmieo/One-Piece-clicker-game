@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One Piece Incremental Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 style="font-style: italic">The Ultimate One Piece Adventure</h1>
+      <div id="currency-display">Berries: <span id="currency">0</span></div>
+      <button id="click-button">Attack!</button>
+      <div class="upgrades-section">
+        <h3>Upgrades</h3>
+        <button id="double-click-upgrade" class="upgrade-button">
+          Unlock 2nd Gear (Cost: 10 Berries)
+        </button>
+      </div>
+      <div class="income-section">
+        <h2>Automated Income</h2>
+        <button id="farm">Farm (Income: 100 Berries)</button>
+        <button id="mine">Mine (Income: 500 Berries)</button>
+      </div>
+      <button id="save-button">Save</button>
+      <button id="erase-button">Erase Data</button>
+      <button id="load-button">Load</button>
+      <button id="hard-reset-button">Hard Reset</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
