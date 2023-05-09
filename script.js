@@ -28,7 +28,6 @@ function updateHealthBar() {
   healthBar.style.backgroundColor = color;
 }
 
-// Call the updateHealthBar function initially to set the initial state of the health bar
 updateHealthBar();
 
 // Add a function to increment the currency and update the display and health bar text
