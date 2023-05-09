@@ -1,26 +1,50 @@
-const clickButton = document.getElementById("click-button");
+let clickButton = document.getElementById("click-button");
+let currencyDisplay = document.getElementById("currency");
+let doubleClickUpgrade = document.getElementById("double-click-upgrade");
+let doubleClickUpgradeCost = 10;
+let clickValue = 1;
+let currency = 100;
+let doubleClickUpgradePurchased = false;
+let allowMultiplePurchases = true;
+let farmIntervalId = null;
+let mineIntervalId = null;
+let health = 100;
+let healthDisplay = document.getElementById("health");
+let healthBar = document.getElementById("health-bar");
+let healthBarText = document.getElementById("health-bar-text");
+let healthBarTextContainer = document.getElementById(
+  "health-bar-text-container"
+);
+currencyDisplay.textContent = currency; // Update the currency display
+////
+///Health bar///
+////
+// Update the health bar width and color based on the current health level
+function updateHealthBar() {
+  const healthPercent = health / 100;
+  const color =
+    healthPercent > 0.5 ? "green" : healthPercent > 0.2 ? "yellow" : "red"; // Change color based on health level
+  healthBar.style.width = `${healthPercent * 100}%`;
+  healthBar.style.backgroundColor = color;
+}
 
-const currencyDisplay = document.getElementById("currency");
-doubleClickUpgrade.textContent = `Unlock 2nd Gear (Cost: ${doubleClickUpgradeCost} Gold)`;
+// Call the updateHealthBar function initially to set the initial state of the health bar
+updateHealthBar();
 
-clickButton.addEventListener("click", function () {
-  incrementCurrency(clickValue);
-});
-//add a function when someone clicks the click button
-
-let currency = 100; // The gold the player has
-let clickValue = 1; // The amount of gold the player gets per click
-let doubleClickUpgradePurchased = false; // Whether the player has purchased the double click upgrade
-let allowMultiplePurchases = true; // Set to false if you want to disable multiple purchases
-let doubleClickUpgradeCost = 10; // The cost of the double click upgrade
-currencyDisplay.textContent = currency; // Set the initial currency display text
-
+// Add a function to increment the currency and update the display and health bar text
 function incrementCurrency(value) {
   currency += value;
+  health -= 10; // Decrease health by 10 with each click
+  if (health <= 0) {
+    currency += 10; // Reward the player with 100 currency when health is depleted
+    health = 100; // Reset the health level
+  }
   if (currency < 0) {
     currency = 0;
   }
-  currencyDisplay.textContent = currency;
+
+  healthDisplay.textContent = health;
+  updateHealthBar(); // Update the health bar after each click
   checkUpgradeAvailability();
 }
 
