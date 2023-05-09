@@ -3,47 +3,50 @@ let currencyDisplay = document.getElementById("currency");
 let doubleClickUpgrade = document.getElementById("double-click-upgrade");
 let doubleClickUpgradeCost = 10;
 let clickValue = 1;
-let currency = 100;
+let currency = 1000;
 let doubleClickUpgradePurchased = false;
 let allowMultiplePurchases = true;
 let farmIntervalId = null;
 let mineIntervalId = null;
 let health = 100;
+let defeats = 0;
 let healthDisplay = document.getElementById("health");
 let healthBar = document.getElementById("health-bar");
 let healthBarText = document.getElementById("health-bar-text");
 let healthBarTextContainer = document.getElementById(
   "health-bar-text-container"
 );
+let damageMultiplier = 1; // This will be doubled when the upgrade is purchased
+
 currencyDisplay.textContent = currency; // Update the currency display
-////
-///Health bar///
-////
+
+let defeatedEnemyCount = 0;
+let maxHealth = 100;
+
 // Update the health bar width and color based on the current health level
 function updateHealthBar() {
-  const healthPercent = health / 100;
+  const healthPercent = health / maxHealth;
   const color =
-    healthPercent > 0.5 ? "green" : healthPercent > 0.2 ? "yellow" : "red"; // Change color based on health level
+    healthPercent > 0.5 ? "green" : healthPercent > 0.2 ? "yellow" : "red";
   healthBar.style.width = `${healthPercent * 100}%`;
   healthBar.style.backgroundColor = color;
 }
 
-updateHealthBar();
-
-// Add a function to increment the currency and update the display and health bar text
-function incrementCurrency(value) {
-  currency += value;
-  health -= 10; // Decrease health by 10 with each click
+// This function is called when the attack button is clicked.
+function attack() {
+  health -= clickValue * damageMultiplier;
   if (health <= 0) {
-    currency += 10; // Reward the player with 100 currency when health is depleted
-    health = 100; // Reset the health level
+    health = maxHealth;
+    defeatedEnemyCount++;
+    currency += 100; // Adding currency after defeat
+    currencyDisplay.textContent = currency; // Updating currency display
+    if (defeatedEnemyCount % 3 === 0) {
+      maxHealth += 100;
+      health = maxHealth;
+    }
   }
-  if (currency < 0) {
-    currency = 0;
-  }
-
   healthDisplay.textContent = health;
-  updateHealthBar(); // Update the health bar after each click
+  updateHealthBar();
   checkUpgradeAvailability();
 }
 
@@ -54,18 +57,18 @@ function purchaseDoubleClickUpgrade() {
     (allowMultiplePurchases || !doubleClickUpgradePurchased)
   ) {
     currency -= doubleClickUpgradeCost;
-    clickValue *= 2;
+    damageMultiplier *= 2; // Double the damage
     currencyDisplay.textContent = currency.toString();
 
-    // Increase the cost of the upgrade and update the button text
-    doubleClickUpgradeCost *= 2.5; // You can change this to any other increase factor
-    doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost); // Round the cost down to an integer
-    doubleClickUpgrade.textContent = `Double your power (Cost: ${doubleClickUpgradeCost} Gold)`;
+    doubleClickUpgradeCost *= 2.5;
+    doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost);
+    doubleClickUpgrade.textContent = `Unlock 2nd Gear (Cost: ${doubleClickUpgradeCost} Berries)`;
 
     if (!allowMultiplePurchases) {
       doubleClickUpgradePurchased = true;
       doubleClickUpgrade.disabled = true;
-      doubleClickUpgrade.textContent = "Power unlocked (Purchased)";
+      doubleClickUpgrade.textContent = "2nd Gear unlocked (Purchased)";
+      document.getElementById("luffy-running.gif").src = "second-gear.gif"; // Changing the gif
     }
   }
 }
@@ -76,48 +79,46 @@ function checkUpgradeAvailability() {
     currency >= doubleClickUpgradeCost &&
     (allowMultiplePurchases || !doubleClickUpgradePurchased)
   ) {
-    doubleClickUpgrade.disabled = false; // Enable the upgrade button
+    doubleClickUpgrade.disabled = false;
   } else {
-    doubleClickUpgrade.disabled = true; // Disable the upgrade button
+    doubleClickUpgrade.disabled = true;
   }
 }
 
-// add farming function for farm button in html it should cost 100 gold and increase gold by 10 every second
+// Farming function for farm button in HTML. Costs 100 gold and increases gold by 10 every second.
 function farm() {
-  //cost 100 gold and increase gold by 10 every second and increase cost by 10%
   if (currency >= 100) {
     currency -= 100;
     currencyDisplay.textContent = currency;
     setInterval(function () {
-      incrementCurrency(10);
+      currency += 10;
+      currencyDisplay.textContent = currency;
+      checkUpgradeAvailability();
     }, 1000);
-    checkUpgradeAvailability();
   }
 }
 
-// add mining function for mine button in html
+// Mining function for mine button in HTML. Costs 500 gold and increases gold by 100 every second.
 function mine() {
   if (currency >= 500) {
     currency -= 500;
     currencyDisplay.textContent = currency;
     setInterval(function () {
-      incrementCurrency(100);
+      currency += 100;
+      currencyDisplay.textContent = currency;
+      checkUpgradeAvailability();
     }, 1000);
-    checkUpgradeAvailability();
   }
 }
 
+clickButton.addEventListener("click", attack);
 doubleClickUpgrade.addEventListener("click", purchaseDoubleClickUpgrade);
-
-document.getElementById("farm").addEventListener("click", farm); //add a function when someone clicks the farm button
+document.getElementById("farm").addEventListener("click", farm);
 document.getElementById("mine").addEventListener("click", mine);
-clickButton.addEventListener("click", function () {
-  incrementCurrency(clickValue);
-});
 
-// Update the initial cost and text content of the doubleClickUpgrade button
-doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost); // Round the cost down to an integer
-doubleClickUpgrade.textContent = `Double your power (Cost: ${doubleClickUpgradeCost} Gold)`;
+doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost);
+doubleClickUpgrade.textContent = `Unlock's 2nd Gear (Cost: ${doubleClickUpgradeCost} Berries)`;
+
 /*
 //////////////////////////////
 /////////////////////////////////
