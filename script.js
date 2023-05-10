@@ -119,6 +119,24 @@ document.getElementById("mine").addEventListener("click", mine);
 doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost);
 doubleClickUpgrade.textContent = `Unlock's 2nd Gear (Cost: ${doubleClickUpgradeCost} Berries)`;
 
+/// canvas stuff
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
+let x = 0;
+const playerimg = new Image();
+const spritewidth = 200;
+const spriteheight = 200;
+playerimg.src = "Luffy-sprite.png";
+
+function animate() {
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  ctx.drawImage(playerimg, 50, 0, 95, 100, 0, 0, spritewidth, spriteheight);
+
+  requestAnimationFrame(animate);
+}
+animate();
 /*
 //////////////////////////////
 /////////////////////////////////

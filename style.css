@@ -84,6 +84,9 @@ h1 {
   font-size: 30px;
 }
 
+#click-button:hover {
+  background-color: #b71515;
+}
 .upgrades-section {
   padding: 10px;
   border-radius: 5px;
@@ -103,4 +106,13 @@ h1 {
   background-color: #e0e0e0;
   padding: 10px;
   border-radius: 5px;
+}
+
+#canvas {
+  position: absolute left;
+  width: 200px;
+  height: 200px;
+  top: 0;
+  left: 0;
+  border: 5px solid black;
 }
