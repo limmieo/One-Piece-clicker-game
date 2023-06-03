@@ -1,3 +1,5 @@
+/// This is to make testing easier
+
 let clickButton = document.getElementById("click-button");
 let currencyDisplay = document.getElementById("currency");
 let doubleClickUpgrade = document.getElementById("double-click-upgrade");
@@ -16,7 +18,13 @@ let healthBarText = document.getElementById("health-bar-text");
 let healthBarTextContainer = document.getElementById(
   "health-bar-text-container"
 );
+
 let damageMultiplier = 1; // This will be doubled when the upgrade is purchased
+let statsDisplay = document.getElementById("stats-display");
+function updateStatsDisplay() {
+  statsDisplay.textContent = `Attack: ${clickValue * damageMultiplier}`;
+}
+// Update the stats display
 
 currencyDisplay.textContent = currency; // Update the currency display
 
@@ -25,31 +33,43 @@ let maxHealth = 100;
 
 // Update the health bar width and color based on the current health level
 function updateHealthBar() {
+  // Updating the health bar
   const healthPercent = health / maxHealth;
-  const color =
-    healthPercent > 0.5 ? "green" : healthPercent > 0.2 ? "yellow" : "red";
+  const color = // Changing the color of the health bar
+    healthPercent > 0.5 ? "green" : healthPercent > 0.2 ? "yellow" : "red"; // Changing the color of the health bar
   healthBar.style.width = `${healthPercent * 100}%`;
-  healthBar.style.backgroundColor = color;
+  healthBar.style.backgroundColor = color; // Changing the color of the health bar
 }
 
 // This function is called when the attack button is clicked.
 function attack() {
-  health -= clickValue * damageMultiplier;
+  health -= clickValue * damageMultiplier + playerLevel;
   if (health <= 0) {
-    health = maxHealth;
-    defeatedEnemyCount++;
+    health = maxHealth; // Resetting health
+    defeatedEnemyCount++; // Increasing the defeated enemy count
     currency += 100; // Adding currency after defeat
+    addExperience(50); // Adding currency after defeat
     currencyDisplay.textContent = currency; // Updating currency display
+    playSoundEffect(); // Playing sound effect
     if (defeatedEnemyCount % 3 === 0) {
-      maxHealth += 100;
-      health = maxHealth;
+      // Increasing the max health every 3 defeats
+      maxHealth += 100; // Increasing max health
+      health = maxHealth; // Resetting health
     }
   }
   healthDisplay.textContent = health;
-  updateHealthBar();
-  checkUpgradeAvailability();
+  updateHealthBar(); // Updating health bar
+  checkUpgradeAvailability(); // Checking if the upgrade is available
+  updateExperienceDisplay(); // Updating experience display
+  updateStatsDisplay(); // Updating stats display
 }
 
+// This function plays a sound effect
+function playSoundEffect() {
+  const audio = new Audio("Punch Sound.mp3");
+  audio.volume = 0.05;
+  audio.play();
+}
 // This function is called when the player clicks the upgrade button
 function purchaseDoubleClickUpgrade() {
   if (
@@ -119,20 +139,79 @@ document.getElementById("mine").addEventListener("click", mine);
 doubleClickUpgradeCost = Math.floor(doubleClickUpgradeCost);
 doubleClickUpgrade.textContent = `Unlock's 2nd Gear (Cost: ${doubleClickUpgradeCost} Berries)`;
 
+//level up function
+let playerLevel = 0;
+let playerExp = 0;
+let expToNextLevel = 100 * (playerLevel + 1);
+let expDisplay = document.getElementById("exp-display");
+
+// This function updates the displayed level and experience
+function updateExperienceDisplay() {
+  expDisplay.textContent = `Level: ${playerLevel}, Experience: ${playerExp}/${expToNextLevel}`;
+}
+
+function addExperience(exp) {
+  playerExp += exp;
+
+  // Check if the player has enough experience to level up
+  if (playerExp >= expToNextLevel) {
+    // Increase the player's level
+    playerLevel++;
+
+    // Subtract the required experience for the previous level
+    playerExp -= expToNextLevel;
+
+    // Update the experience required for the next level
+    expToNextLevel = 100 * (playerLevel + 1);
+  }
+}
+let instakillButton = document.getElementById("instakill-button");
+let LevelUpButton = document.getElementById("level-up-button");
+
+LevelUpButton.addEventListener("click", function () {
+  addExperience(expToNextLevel);
+  updateExperienceDisplay();
+});
+
+instakillButton.addEventListener("click", function () {
+  health = 0;
+  attack();
+});
+
 /// canvas stuff
+/*const canvas = document.getElementById("canvas1");
+const ctx = canvas.getContext("2d");
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
+let x = 0;
+const playerimg = new Image();
+const spritewidth = 256;
+const spriteheight = 256;
+
+//playerimg.src = "Luffy-sprite.png";
+
+function animate() {
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  ctx.drawImage(playerimg, 0, 0, 95, 100, 0, 0, spritewidth, spriteheight);
+
+  requestAnimationFrame(animate);
+}
+animate();
+/*
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 let x = 0;
 const playerimg = new Image();
-const spritewidth = 200;
-const spriteheight = 200;
-playerimg.src = "Luffy-sprite.png";
+const spritewidth = 256;
+const spriteheight = 256;
+
+//playerimg.src = "Luffy-sprite.png";
 
 function animate() {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  ctx.drawImage(playerimg, 50, 0, 95, 100, 0, 0, spritewidth, spriteheight);
+  ctx.drawImage(playerimg, 0, 0, 95, 100, 0, 0, spritewidth, spriteheight);
 
   requestAnimationFrame(animate);
 }

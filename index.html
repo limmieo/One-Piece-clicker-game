@@ -11,16 +11,20 @@
       <h1 style="font-style: italic">The Ultimate One Piece Adventure</h1>
       <h2>Click the button to attack!</h2>
       <div id="currency-display">Berries: <span id="currency">0</span></div>
-      <div>
-        <canvas id="canvas" width="100" height="100"> </canvas>
-      </div>
+      <div id="exp-display">Level: 0, Experience: 0/100</div>
+      <div id="stats-display">Attack: 0</div>
 
       <img
         class="luffy"
-        src="luffy-running.gif"
+        src="luffy fighting.gif"
         alt="Luffy running"
-        style="width: 100px; height: auto"
+        style="width: 500px; height: 300px"
       />
+      <button style="font-size: 40px" id="instakill-button">
+        Instakill (for testing)
+      </button>
+      <button style="font-size: 40px" id="level-up-button">
+        Level Up (for testing)
 
       <button id="click-button">Attack!</button>
       <div id="health-bar-container">
@@ -41,10 +45,14 @@
         <button id="farm">Farm (Income: 100 Berries)</button>
         <button id="mine">Mine (Income: 500 Berries)</button>
       </div>
-      <button id="save-button">Save</button>
-      <button id="erase-button">Erase Data</button>
-      <button id="load-button">Load</button>
-      <button id="hard-reset-button">Hard Reset</button>
+
+      <div class="save-section">
+        <h2>Game Controls</h2>
+        <button id="save-button">Save</button>
+        <button id="erase-button">Erase Data</button>
+        <button id="load-button">Load</button>
+        <button id="hard-reset-button">Hard Reset</button>
+      </div>
     </div>
     <script src="script.js"></script>
   </body>
